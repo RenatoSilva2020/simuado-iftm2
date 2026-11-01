@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado IFTM - Edital 2026</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #1a365d;
+        }
+        .header-info {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+            border-bottom: 4px solid #3182ce;
+        }
+        .discipline-section {
+            margin-top: 30px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #cbd5e0;
+            color: #2b6cb0;
+        }
+        .question-card {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .text-box {
+            background-color: #fdf6e3;
+            padding: 15px;
+            border-left: 4px solid #d69e2e;
+            margin-bottom: 15px;
+            font-family: Georgia, serif;
+        }
+        .options {
+            list-style-type: none;
+            padding: 0;
+        }
+        .options li {
+            margin: 8px 0;
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+        .options li:hover {
+            background: #edf2f7;
+        }
+        .options label {
+            display: block;
+            padding: 12px;
+            cursor: pointer;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .options input[type="radio"] {
+            margin-right: 12px;
+            transform: scale(1.2);
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #38a169;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 30px;
+        }
+        button:hover {
+            background-color: #2f855a;
+        }
+        #result-container {
+            display: none;
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 30px;
+            margin-top: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-top: 6px solid #38a169;
+        }
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #edf2f7;
+            font-size: 1.1em;
+        }
+        .result-item.total {
+            font-size: 1.3em;
+            font-weight: bold;
+            background-color: #f0fff4;
+            padding: 15px;
+            border-radius: 6px;
+            border-bottom: none;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-info">
+        <h1>Simulado IFTM - Edital 2026</h1>
+        <p>Conteúdos baseados no Edital oficial. 30 questões divididas em: Língua Portuguesa (9), Matemática (9), Ciências (4), História (4) e Geografia (4).</p>
+    </div>
+    
+    <form id="quizForm">
+        <div id="quizContainer"></div>
+        <button type="button" onclick="calculateResults()">Finalizar e Ver Resultados</button>
+    </form>
+
+    <div id="result-container">
+        <h2>Seu Desempenho</h2>
+        <div id="resultsList"></div>
+        <button style="background-color: #3182ce;" onclick="location.reload()">Refazer Simulado (Embaralhar Novamente)</button>
+    </div>
+
+    <script>
+        const questionsData = [
+            // ================= LÍNGUA PORTUGUESA (9 questões) =================
+            {
+                discipline: "Língua Portuguesa",
+                text: "<div class='text-box'>A preservação da Amazônia é, sem dúvida, o maior desafio ambiental do século. Pesquisas apontam que o desmatamento caiu 22% neste último ano, mas o esforço precisa ser contínuo. É inaceitável que o lucro imediato ainda se sobreponha à vida.</div><br>Na leitura do texto, assinale a alternativa que apresenta um <strong>fato</strong> e não uma opinião:",
+                options: [
+                    { text: "A preservação da Amazônia é o maior desafio ambiental do século.", isCorrect: false },
+                    { text: "É inaceitável que o lucro imediato se sobreponha à vida.", isCorrect: false },
+                    { text: "O desmatamento caiu 22% neste último ano.", isCorrect: true },
+                    { text: "O esforço para combater o desmatamento precisa ser contínuo.", isCorrect: false },
+                    { text: "A Amazônia é sem dúvida a região mais importante do Brasil.", isCorrect: false }
+                ]
+            },
+            {
+                discipline: "Língua Portuguesa",
+                text: "Observe o trecho: 'Ele estudou bastante, <strong>portanto</strong>, conseguiu a aprovação no Instituto Federal'. A conjunção em destaque estabelece uma relação de:",
+                options: [
+                    { text: "Oposição (adversidade).", isCorrect: false },
+                    { text: "Conclusão.", isCorrect: true },
+                    { text: "Explicação.", isCorrect: false },
+                    { text: "Adição.", isCorrect: false },
+                    { text: "Condição.", isCorrect: false }
+                ]
+            },
+            {
+                discipline: "Língua Portuguesa",
+                text: "Assinale a alternativa cuja frase está escrita com a <strong>ortografia e acentuação</strong> totalmente corretas de acordo com a norma-padrão:",
+                options: [
+                    { text: "O excesso de previlégios prejudica a convivência na sociedade.", isCorrect: false },
+                    { text: "A paralização dos motoristas causou transtornos na cidade.", isCorrect: false },
+                    { text: "O juiz analisou a exceção e concedeu o benefício ao trabalhador.", isCorrect: true },
+                    { text: "O heroi da história conseguiu resgatar o tesouro perdido.", isCorrect: false },
+                    { text: "Eles tem muito interesse em participar do novo projeto escolar.", isCorrect: false }
+                ]
+            },
+            {
+                discipline: "Língua Portuguesa",
+                text: "Considerando as regras de <strong>concordância verbal e nominal</strong>, assinale a alternativa INCORRETA:",
+                options: [
+                    { text: "Fazia dez anos que eu não visitava minha cidade natal.", isCorrect: false },
+                    { text: "Houveram muitos protestos durante a semana passada.", isCorrect: true },
+                    { text: "Meio-dia e meia, os alunos saíram correndo para o refeitório.", isCorrect: false },
+                    { text: "É proibida a entrada de pessoas não autorizadas neste setor.", isCorrect: false },
+                    { text: "Seguem anexas as planilhas solicitadas pela coordenação.", isCorrect: false }
+                ]
+            },
+            {
+                discipline: "Língua Portuguesa",
+                text: "Leia: 'A árvore estava carregada de frutos deliciosos, mas os pássaros comeram todos antes da colheita.' As palavras destacadas ('carregada', 'mas' e 'pássaros') pertencem, respectivamente, às seguintes classes de palavras:",
+                options: [
+                    { text: "Substantivo, advérbio e verbo.", isCorrect: false },
+                    { text: "Adjetivo, conjunção e substantivo.", isCorrect: true },
+                    { text: "Verbo, preposição e adjetivo.", isCorrect: false },
+                    { text: "Adjetivo, preposição e substantivo.", isCorrect: false },
+                    { text: "Substantivo, conjunção e advérbio.", isCorrect: false }
+                ]
+            },
+            {
+                discipline: "Língua Portuguesa",
+                text: "No contexto da pontuação, a vírgula foi usada <strong>corretamente</strong> para separar um vocativo na seguinte frase:",
+                options: [
+                    { text: "Crianças de todas as idades, brincavam no parque municipal.", isCorrect: false },
+                    { text: "João, pegue seus cadernos e venha fazer a lição de casa agora.", isCorrect: true },
+                    { text: "Os moradores daquela rua, decidiram fazer um abaixo-assinado.", isCorrect: false },
+                    { text: "Fomos ao mercado comprar feijão, arroz, carne e verduras.", isCorrect: false },
+                    { text: "Ontem à noite choveu muito, por isso as ruas estão alagadas.", isCorrect: false }
+                ]
+            },
+            {
+                discipline: "Língua Portuguesa",
+                text: "No trecho 'O silêncio na sala era <strong>ensurdecedor</strong> quando o professor anunciou a nota', a palavra destacada foi empregada no sentido de:",
+                options: [
+                    { text: "Causar problemas de audição nos estudantes.", isCorrect: false },
+                    { text: "Apresentar um barulho muito alto no ambiente.", isCorrect: false },
+                    { text: "Expressar uma tensão extrema e constrangedora por meio da ausência de som.", isCorrect: true },
+                    { text: "Mostrar que os alunos não estavam prestando atenção à fala do professor.", isCorrect: false },
+                    { text: "Denunciar que a escola estava localizada em uma via movimentada.", isCorrect: false }
+                ]
+            },
+            {
+                discipline: "Língua Portuguesa",
+                text: "<div class='text-box'>A vacina contra a dengue já está disponível nos postos de saúde de todo o país para o público-alvo. Leve o seu documento de identidade, cartão de vacinação e proteja-se!</div><br>Qual é a principal <strong>finalidade</strong> deste texto?",
+                options: [
+                    { text: "Narrar uma história ficcional sobre a invenção da vacina.", isCorrect: false },
+                    { text: "Convencer e orientar o leitor a tomar uma atitude específica.", isCorrect: true },
+                    { text: "Explicar cientificamente como o vírus da dengue afeta o corpo.", isCorrect: false },
+                    { text: "Protestar contra a falta de vacinas nos hospitais particulares.", isCorrect: false },
+                    { text: "Descrever detalhadamente a estrutura de um posto de saúde.", isCorrect: false }
+                ]
+            },
+            {
+                discipline: "Língua Portuguesa",
+                text: "Em 'Maria finalmente conseguiu parar de fumar após tentar por meses', qual informação <strong>implícita</strong> (que não está escrita, mas pode ser deduzida) está correta?",
+                options: [
+                    { text: "Maria nunca gostou do cheiro de cigarro.", isCorrect: false },
+                    { text: "Maria começou a fumar quando era muito jovem.", isCorrect: false },
+                    { text: "Maria tinha o hábito de fumar antes de conseguir parar.", isCorrect: true },
+                    { text: "Maria usou adesivos de nicotina para conseguir parar de fumar.", isCorrect: false },
+                    { text: "A família de Maria estava pressionando-a para que ela parasse.", isCorrect: false }
+                ]
+            },
+
+            // ================= MATEMÁTICA (9 questões) =================
+            {
+                discipline: "Matemática",
+                text: "Uma confecção produz máscaras de tecido. Três costureiras, trabalhando no mesmo ritmo, conseguem fazer 180 máscaras em 2 dias. Se o dono contratar mais duas costureiras trabalhando no mesmo ritmo, quantas máscaras as 5 costureiras farão em 4 dias?",
+                options: [
+                    { text: "300 máscaras.", isCorrect: false },
+                    { text: "450 máscaras.", isCorrect: false },
+                    { text: "600 máscaras.", isCorrect: true }, // (180/3)/2 = 30 masc/dia por costureira. 5 cost * 30 * 4 dias = 600.
+                    { text: "720 máscaras.", isCorrect: false },
+                    { text: "800 máscaras.", isCorrect: false }
+                ]
+            },
+            {
+                discipline: "Matemática",
+                text: "Para um evento da escola, foram comprados pacotes de suco de 2 litros e copinhos de 250 mL. Com o volume exato de 6 pacotes de suco, quantos copinhos de 250 mL é possível encher totalmente?",
+                options: [
+                    { text: "24", isCorrect: false },
+                    { text: "36", isCorrect: false },
+                    { text: "48", isCorrect: true }, // 6 * 2000 ml = 12000 ml. 12000 / 250 = 48.
+                    { text: "50", isCorrect: false },
+                    { text: "60", isCorrect: false }
+                ]
+            },
+            {
+                discipline: "Matemática",
+                text: "A soma do dobro de um número com 15 é igual ao seu triplo menos 5. Na equação do 1º grau que representa essa situação, qual é o valor desse número?",
+                options: [
+                    { text: "10", isCorrect: false },
+                    { text: "15", isCorrect: false },
+                    { text: "20", isCorrect: true }, // 2x + 15 = 3x - 5 -> 3x - 2x = 15 + 5 -> x = 20.
+                    { text: "25", isCorrect: false },
+                    { text: "30", isCorrect: false }
+                ]
+            },
+            {
+                discipline: "Matemática",
+                text: "Um terreno retangular tem 12 metros de largura e seu comprimento mede o triplo de sua largura. Qual é a <strong>área</strong> total desse terreno?",
+                options: [
+                    { text: "36 m²", isCorrect: false },
+                    { text: "48 m²", isCorrect: false },
+                    { text: "96 m²", isCorrect: false },
+                    { text: "216 m²", isCorrect: false },
+                    { text: "432 m²", isCorrect: true } // comp = 12 * 3 = 36. Area = 12 * 36 = 432.
+                ]
+            },
+            {
+                discipline: "Matemática",
+                text: "Ao resolver a expressão numérica <strong>[ (15 – 3 × 2) ÷ 3 + 2³ ]</strong>, encontra-se como resultado:",
+                options: [
+                    { text: "11", isCorrect: true }, // (15 - 6) / 3 + 8 -> 9/3 + 8 -> 3 + 8 = 11.
+                    { text: "16", isCorrect: false },
+                    { text: "24", isCorrect: false },
+                    { text: "27", isCorrect: false },
+                    { text: "35", isCorrect: false }
+                ]
+            },
+            {
+                discipline: "Matemática",
+                text: "Uma geladeira que custava R$ 2.500,00 foi anunciada com um desconto de 12% em pagamentos à vista. Qual será o valor pago pela geladeira se a compra for feita à vista?",
+                options: [
+                    { text: "R$ 2.100,00", isCorrect: false },
+                    { text: "R$ 2.200,00", isCorrect: true }, // 12% de 2500 = 300. 2500 - 300 = 2200.
+                    { text: "R$ 2.250,00", isCorrect: false },
+                    { text: "R$ 2.300,00", isCorrect: false },
+                    { text: "R$ 2.380,00", isCorrect: false }
+                ]
+            },
+            {
+                discipline: "Matemática",
+                text: "Um aluno obteve as seguintes notas nos bimestres de Matemática: 6,0; 7,5 e 8,5. Qual deve ser a sua nota no 4º bimestre para que sua média aritmética final (dos quatro bimestres) seja exatamente 7,5?",
+                options: [
+                    { text: "7,0", isCorrect: false },
+                    { text: "7,5", isCorrect: false },
+                    { text: "8,0", isCorrect: true }, // (6+7.5+8.5+x)/4 = 7.5 -> 22 + x = 30 -> x = 8.0.
+                    { text: "8,5", isCorrect: false },
+                    { text: "9,0", isCorrect: false }
+                ]
+            },
+            {
+                discipline: "Matemática",
+                text: "Dois faróis luminosos piscam em intervalos diferentes. O primeiro pisca a cada 15 segundos e o segundo a cada 25 segundos. Se os dois piscaram juntos exatamente às 20h00, em quantos <strong>segundos</strong> eles voltarão a piscar juntos novamente?",
+                options: [
+                    { text: "30 segundos.", isCorrect: false },
+                    { text: "40 segundos.", isCorrect: false },
+                    { text: "50 segundos.", isCorrect: false },
+                    { text: "75 segundos.", isCorrect: true }, // MMC(15,25) = 75.
+                    { text: "100 segundos.", isCorrect: false }
+                ]
+            },
+            {
+                discipline: "Matemática",
+                text: "Uma caixa d'água tem a forma de um bloco retangular (paralelepípedo) com dimensões: 2 metros de comprimento, 1,5 metro de largura e 1 metro de profundidade (altura). Sabendo que 1 m³ equivale a 1.000 litros, qual é a capacidade total, em <strong>litros</strong>, dessa caixa d'água?",
+                options: [
+                    { text: "2.000 litros.", isCorrect: false },
+                    { text: "3.000 litros.", isCorrect: true }, // 2 * 1.5 * 1 = 3 m³. 3 * 1000 = 3000L.
+                    { text: "4.500 litros.", isCorrect: false },
+                    { text: "15.000 litros.", isCorrect: false },
+                    { text: "30.000 litros.", isCorrect: false }
+                ]
+            },
+
+            // ================= CIÊNCIAS (4 questões) =================
+            {
+                discipline: "Ciências",
+                text: "No corpo humano, o sistema digestório é responsável por quebrar os alimentos em nutrientes. Em qual órgão desse sistema ocorre a absorção da maior parte dos nutrientes para a corrente sanguínea?",
+                options: [
+                    { text: "Estômago.", isCorrect: false },
+                    { text: "Fígado.", isCorrect: false },
+                    { text: "Intestino grosso.", isCorrect: false },
+                    { text: "Intestino delgado.", isCorrect: true },
+                    { text: "Pâncreas.", isCorrect: false }
+                ]
+            },
+            {
+                discipline: "Ciências",
+                text: "O movimento de <strong>translação</strong> da Terra consiste na volta que nosso planeta dá em torno do Sol. Em conjunto com a inclinação do eixo terrestre, esse movimento é diretamente responsável:",
+                options: [
+                    { text: "Pela ocorrência do dia e da noite.", isCorrect: false },
+                    { text: "Pela sucessão das quatro estações do ano.", isCorrect: true },
+                    { text: "Pelos diferentes formatos das fases da Lua.", isCorrect: false },
+                    { text: "Pelo aquecimento global e destruição da camada de ozônio.", isCorrect: false },
+                    { text: "Pela formação de tsunamis e terremotos tectônicos.", isCorrect: false }
+                ]
+            },
+            {
+                discipline: "Ciências",
+                text: "Em uma cadeia alimentar num ecossistema de campo, temos: capim -> gafanhoto -> sapo -> cobra -> gavião. Se uma praga dizimar totalmente a população de sapos dessa região, qual o impacto ecológico MAIS PROVÁVEL de ocorrer em curto prazo?",
+                options: [
+                    { text: "A população de cobras irá aumentar rapidamente por falta de competição.", isCorrect: false },
+                    { text: "Os gaviões passarão a se alimentar de capim para sobreviver.", isCorrect: false },
+                    { text: "A população de gafanhotos aumentará devido à ausência de seu principal predador.", isCorrect: true },
+                    { text: "A quantidade de capim no ecossistema dobrará devido à morte dos sapos.", isCorrect: false },
+                    { text: "Todo o ecossistema será extinto, incluindo fungos e bactérias.", isCorrect: false }
+                ]
+            },
+            {
+                discipline: "Ciências",
+                text: "Na natureza, a matéria pode sofrer transformações físicas ou químicas. Assinale a alternativa que descreve claramente uma <strong>transformação química</strong>:",
+                options: [
+                    { text: "O derretimento de uma pedra de gelo fora do congelador.", isCorrect: false },
+                    { text: "A ferrugem se formando no portão de ferro exposto à chuva.", isCorrect: true },
+                    { text: "A dissolução de açúcar em um copo de água.", isCorrect: false },
+                    { text: "A evaporação da água de uma poça após a chuva.", isCorrect: false },
+                    { text: "Cortar uma folha de papel em pequenos pedaços com a tesoura.", isCorrect: false }
+                ]
+            },
+
+            // ================= HISTÓRIA (4 questões) =================
+            {
+                discipline: "História",
+                text: "A Constituição Federal de 1988, conhecida como 'Constituição Cidadã', foi um marco na redemocratização do Brasil pois encerrou:",
+                options: [
+                    { text: "A Primeira República governada por civis do eixo café com leite.", isCorrect: false },
+                    { text: "O período da Era Vargas e a vigência do Estado Novo.", isCorrect: false },
+                    { text: "A Ditadura Civil-Militar (iniciada em 1964) e garantiu o restabelecimento do voto direto, direitos sociais e civis.", isCorrect: true },
+                    { text: "O Brasil Império, abolindo definitivamente a escravidão.", isCorrect: false },
+                    { text: "O período colonial e a dominação política exercida por Portugal.", isCorrect: false }
+                ]
+            },
+            {
+                discipline: "História",
+                text: "Durante a colonização do Brasil, as populações indígenas e os povos africanos escravizados não aceitaram pacificamente a dominação. Dentre as principais formas de resistência da população negra, destacou-se:",
+                options: [
+                    { text: "A criação dos Quilombos, comunidades de fugitivos que buscavam viver em liberdade e manter suas tradições.", isCorrect: true },
+                    { text: "O pagamento de impostos à Coroa Portuguesa para a compra coletiva de áreas urbanas.", isCorrect: false },
+                    { text: "O envio sistemático de cartas de repúdio ao Papa, exigindo punição aos colonizadores.", isCorrect: false },
+                    { text: "A criação de sindicatos de trabalhadores rurais que organizavam greves nos engenhos de açúcar.", isCorrect: false },
+                    { text: "A migração pacífica e voluntária em massa de escravizados de volta para a Europa.", isCorrect: false }
+                ]
+            },
+            {
+                discipline: "História",
+                text: "A 'Era Vargas' foi um longo período da história brasileira que abrange de 1930 a 1945. Um dos maiores impactos sociais e políticos desse período de Getúlio Vargas foi:",
+                options: [
+                    { text: "A privatização das indústrias de base e o desestímulo à industrialização.", isCorrect: false },
+                    { text: "A consolidação das Leis do Trabalho (CLT), que regulamentaram os direitos trabalhistas no país.", isCorrect: true },
+                    { text: "O fim do voto feminino, que havia sido conquistado durante o Império.", isCorrect: false },
+                    { text: "A criação do Movimento Diretas Já, que garantia eleições presidenciais anuais.", isCorrect: false },
+                    { text: "O alinhamento do Brasil aos países do Eixo no início e até o fim da Segunda Guerra Mundial.", isCorrect: false }
+                ]
+            },
+            {
+                discipline: "História",
+                text: "A Independência do Brasil, proclamada em 7 de setembro de 1822, difere de muitos processos de independência ocorridos na América espan
