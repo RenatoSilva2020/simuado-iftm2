@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulado IFTM - Edital 2026</title>
+    <title>Simulado 2 - SOU + IFTM 2026</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -421,4 +421,205 @@
             },
             {
                 discipline: "História",
-                text: "A Independência do Brasil, proclamada em 7 de setembro de 1822, difere de muitos processos de independência ocorridos na América espan
+                text: "A Independência do Brasil, proclamada em 7 de setembro de 1822, difere de muitos processos de independência ocorridos na América espanhola porque:",
+                options: [
+                    { text: "Foi um processo liderado exclusivamente por camadas populares e escravizados, instalando uma república democrática.", isCorrect: false },
+                    { text: "Foi apoiada pelas forças armadas francesas para prejudicar Portugal.", isCorrect: false },
+                    { text: "A ruptura com a metrópole manteve o regime monárquico e preservou o herdeiro da casa real portuguesa como imperador.", isCorrect: true },
+                    { text: "Teve origem num tratado pacífico onde Portugal cedeu o território sem exigir nenhum tipo de compensação.", isCorrect: false },
+                    { text: "Manteve o Brasil dividido em pequenos reinos independentes, cada um liderado por um capitão-donatário.", isCorrect: false }
+                ]
+            },
+
+            // ================= GEOGRAFIA (4 questões) =================
+            {
+                discipline: "Geografia",
+                text: "O processo de Globalização é marcado pela intensa circulação de pessoas, mercadorias e informações. No entanto, produz desigualdades socioespaciais porque:",
+                options: [
+                    { text: "Impede o desenvolvimento de tecnologias de comunicação nos países em desenvolvimento.", isCorrect: false },
+                    { text: "Distribui os recursos naturais igualmente, mas concentra a população no Hemisfério Sul.", isCorrect: false },
+                    { text: "Integra economicamente todo o planeta, porém concentra a riqueza, a tecnologia e os lucros em determinados países e grandes corporações.", isCorrect: true },
+                    { text: "Bloqueia a produção cultural internacional para proteger as indústrias cinematográficas de países emergentes.", isCorrect: false },
+                    { text: "Força o retorno das populações urbanas para as áreas rurais (êxodo urbano) nos países ricos.", isCorrect: false }
+                ]
+            },
+            {
+                discipline: "Geografia",
+                text: "Sobre as regiões do Brasil e seus biomas predominantes, qual é a região caracterizada por apresentar em grande parte de seu território o clima Semiárido e o bioma Caatinga, além de abrigar sub-regiões como a Zona da Mata e o Sertão?",
+                options: [
+                    { text: "Região Centro-Oeste.", isCorrect: false },
+                    { text: "Região Sul.", isCorrect: false },
+                    { text: "Região Norte.", isCorrect: false },
+                    { text: "Região Nordeste.", isCorrect: true },
+                    { text: "Região Sudeste.", isCorrect: false }
+                ]
+            },
+            {
+                discipline: "Geografia",
+                text: "Para se localizar no espaço geográfico, utilizam-se as coordenadas geográficas. A linha imaginária que divide a Terra em Hemisfério Norte e Hemisfério Sul, servindo como base para determinar a latitude, chama-se:",
+                options: [
+                    { text: "Trópico de Capricórnio.", isCorrect: false },
+                    { text: "Trópico de Câncer.", isCorrect: false },
+                    { text: "Meridiano de Greenwich.", isCorrect: false },
+                    { text: "Linha do Equador.", isCorrect: true },
+                    { text: "Círculo Polar Ártico.", isCorrect: false }
+                ]
+            },
+            {
+                discipline: "Geografia",
+                text: "A partir da década de 1950, o Brasil passou por um intenso processo de <strong>urbanização</strong>. O principal fator histórico e econômico que impulsionou o crescimento das cidades e provocou o êxodo rural massivo nesse período foi:",
+                options: [
+                    { text: "O avanço da industrialização no país, sobretudo na Região Sudeste, criando postos de trabalho urbanos.", isCorrect: true },
+                    { text: "O declínio total da agricultura, tornando o campo inabitável devido às secas severas em todas as regiões.", isCorrect: false },
+                    { text: "A implementação de políticas de distribuição de terras rurais, que fez com que fazendeiros mudassem para a cidade.", isCorrect: false },
+                    { text: "A descoberta de ouro nos litorais brasileiros, atraindo a população para o comércio portuário.", isCorrect: false },
+                    { text: "O fim da mineração no ciclo do ouro em Minas Gerais, que obrigou a população a fundar grandes capitais pelo país.", isCorrect: false }
+                ]
+            }
+        ];
+
+        // Definindo a ordem rigorosa das disciplinas conforme edital[cite: 41]
+        const disciplineOrder = ["Língua Portuguesa", "Matemática", "Ciências", "História", "Geografia"];
+
+        // Função para embaralhar um array
+        function shuffleArray(array) {
+            let curId = array.length;
+            while (0 !== curId) {
+                let randId = Math.floor(Math.random() * curId);
+                curId -= 1;
+                let tmp = array[curId];
+                array[curId] = array[randId];
+                array[randId] = tmp;
+            }
+            return array;
+        }
+
+        let orderedAndShuffledQuestions = [];
+
+        function renderQuiz() {
+            const container = document.getElementById('quizContainer');
+            container.innerHTML = ""; 
+            orderedAndShuffledQuestions = []; 
+
+            let globalQuestionIndex = 1;
+
+            disciplineOrder.forEach(disciplineName => {
+                let questionsOfDiscipline = questionsData.filter(q => q.discipline === disciplineName);
+                
+                // Embaralha as questões APENAS dentro de sua disciplina
+                questionsOfDiscipline = shuffleArray(questionsOfDiscipline);
+
+                if(questionsOfDiscipline.length > 0) {
+                    let sectionTitle = document.createElement('h2');
+                    sectionTitle.className = 'discipline-section';
+                    sectionTitle.innerText = disciplineName;
+                    container.appendChild(sectionTitle);
+
+                    questionsOfDiscipline.forEach(q => {
+                        orderedAndShuffledQuestions.push(q);
+                        let shuffledOptions = shuffleArray([...q.options]);
+
+                        let qDiv = document.createElement('div');
+                        qDiv.className = 'question-card';
+                        
+                        let questionHTML = `
+                            <h3>Questão ${globalQuestionIndex}</h3>
+                            <p>${q.text}</p>
+                            <ul class="options">
+                        `;
+
+                        shuffledOptions.forEach((opt, optIndex) => {
+                            questionHTML += `
+                                <li>
+                                    <label>
+                                        <input type="radio" name="q${globalQuestionIndex}" value="${opt.isCorrect}" required>
+                                        ${opt.text}
+                                    </label>
+                                </li>
+                            `;
+                        });
+
+                        questionHTML += `</ul>`;
+                        qDiv.innerHTML = questionHTML;
+                        container.appendChild(qDiv);
+                        
+                        globalQuestionIndex++;
+                    });
+                }
+            });
+        }
+
+        function calculateResults() {
+            const form = document.getElementById('quizForm');
+            const formData = new FormData(form);
+            
+            let answersCount = 0;
+            for(let key of formData.keys()) {
+                answersCount++;
+            }
+
+            if(answersCount < orderedAndShuffledQuestions.length) {
+                alert("Por favor, responda a todas as questões antes de finalizar o simulado.");
+                return;
+            }
+
+            let scores = {};
+            disciplineOrder.forEach(d => {
+                scores[d] = { correct: 0, total: 0 };
+            });
+
+            let totalCorrect = 0;
+            let totalQuestions = orderedAndShuffledQuestions.length;
+
+            orderedAndShuffledQuestions.forEach((q, index) => {
+                let questionNumber = index + 1;
+                let answer = formData.get(`q${questionNumber}`);
+                
+                scores[q.discipline].total += 1;
+                
+                if (answer === "true") {
+                    scores[q.discipline].correct += 1;
+                    totalCorrect += 1;
+                }
+            });
+
+            form.style.display = 'none';
+            document.querySelector('.header-info').style.display = 'none';
+            
+            const resultContainer = document.getElementById('result-container');
+            const resultsList = document.getElementById('resultsList');
+            
+            let html = `
+                <div class="result-item total">
+                    <span>Acertos Totais:</span>
+                    <span>${totalCorrect} de ${totalQuestions} (${Math.round((totalCorrect/totalQuestions)*100)}%)</span>
+                </div>
+                <h3>Desempenho por Disciplina:</h3>
+            `;
+
+            disciplineOrder.forEach(discipline => {
+                let data = scores[discipline];
+                if(data.total > 0) {
+                    let percentage = Math.round((data.correct / data.total) * 100);
+                    let color = percentage >= 60 ? 'green' : (percentage >= 40 ? 'orange' : 'red');
+                    html += `
+                        <div class="result-item">
+                            <span><strong>${discipline}</strong></span>
+                            <span>
+                                ${data.correct} / ${data.total} 
+                                <span style="color:${color}; font-weight:bold; margin-left: 10px;">(${percentage}%)</span>
+                            </span>
+                        </div>
+                    `;
+                }
+            });
+
+            resultsList.innerHTML = html;
+            resultContainer.style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+
+        window.onload = renderQuiz;
+    </script>
+</body>
+</html>
